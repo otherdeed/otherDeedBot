@@ -1,0 +1,789 @@
+{
+  "sediment": {
+    "Biogenic Swamp": {
+      "1":4939 ,
+      "2":3026 ,
+      "3":2035,
+      "TotalAmount":10000
+    },
+    "Chemical Goo": {
+      "1":10030 ,
+      "2":6015,
+      "3":3955,
+      "TotalAmount":20000
+    },
+    "Cosmic Dream": {
+      "1":11492,
+      "2":6901,
+      "3":4607,
+      "TotalAmount":22000
+    },
+    "Infinite Expanse": {
+      "1":12413,
+      "2":7590,
+      "3":4997,
+      "TotalAmount":25000
+    },
+    "Rainbow Atmos": {
+      "1":10815 ,
+      "2":6738 ,
+      "3":4447,
+      "TotalAmount":22000
+    }
+  },
+  "environments": {
+    "Chaos": {
+      "1":0 ,
+      "2":0 ,
+      "3":0,
+      "4":0,
+      "5":111,
+      "TotalAmount":111
+    },
+    "Acid": {
+      "1":403 ,
+      "2":361 ,
+      "3":283,
+      "4":228,
+      "5":127,
+      "TotalAmount":1402
+    },
+    "Botanical": {
+      "1":500 ,
+      "2":417,
+      "3":313,
+      "4":239,
+      "5":165,
+      "TotalAmount":1634
+    },
+    "Luster": {
+      "1":540 ,
+      "2":469,
+      "3":374,
+      "4":301,
+      "5":155,
+      "TotalAmount":1839
+    },
+    "Sludge": {
+      "1":603,
+      "2":462,
+      "3":400,
+      "4":329,
+      "5":191,
+      "TotalAmount":1985
+    },
+    "Obsidian": {
+      "1":673 ,
+      "2":549,
+      "3":493,
+      "4":341,
+      "5":228,
+      "TotalAmount":2284
+    },
+    "Mycelium": {
+      "1":732,
+      "2":591,
+      "3":449,
+      "4":340,
+      "5":246,
+      "TotalAmount":2358
+    },
+    "Shadow": {
+      "1":734,
+      "2":608,
+      "3":447,
+      "4":369,
+      "5":222,
+      "TotalAmount":2380
+    },
+    "Sky": {
+      "1":725,
+      "2":588,
+      "3":486,
+      "4":370,
+      "5":244,
+      "TotalAmount":2413
+    },
+    "Crystal": {
+      "1":768,
+      "2":655,
+      "3":575,
+      "4":374,
+      "5":255,
+      "TotalAmount":2627
+    },
+    "Bone": {
+      "1":819,
+      "2":646,
+      "3":552,
+      "4":406,
+      "5":248,
+      "TotalAmount":2671
+    }, 
+    "Plague": {
+      "1":830,
+      "2":698,
+      "3":612,
+      "4":442,
+      "5":271,
+      "TotalAmount":2853
+    },
+    "Jungle": {
+      "1":880,
+      "2":748,
+      "3":599,
+      "4":412,
+      "5":329,
+      "TotalAmount":2968
+    },
+    "Crimson": {
+      "1":967,
+      "2":785,
+      "3":648,
+      "4":491,
+      "5":326,
+      "TotalAmount":3217
+    },
+    "Mallow": {
+      "1":967,
+      "2":788,
+      "3":659,
+      "4":483,
+      "5":343,
+      "TotalAmount":3240
+    },
+    "Spires": {
+      "1":978,
+      "2":823,
+      "3":653,
+      "4":468,
+      "5":342,
+      "TotalAmount":3264
+    },
+    "Veldan": {
+      "1":986,
+      "2":879,
+      "3":709,
+      "4":581,
+      "5":358,
+      "TotalAmount":3513
+    },
+    "Mystic": {
+      "1":1152,
+      "2":933,
+      "3":728,
+      "4":557,
+      "5":384,
+      "TotalAmount":3754
+    },
+    "Wastes": {
+      "1":1154,
+      "2":1005,
+      "3":819,
+      "4":619,
+      "5":379,
+      "TotalAmount":3976
+    },
+    "Sulfuric": {
+      "1":1179,
+      "2":997,
+      "3":809,
+      "4":628,
+      "5":415,
+      "TotalAmount":4028
+    },
+    "Ruins": {
+      "1":1243,
+      "2":1069,
+      "3":833,
+      "4":613,
+      "5":466,
+      "TotalAmount":4224
+    },
+    "Sands": {
+      "1":1312,
+      "2":1069,
+      "3":905,
+      "4":668,
+      "5":385,
+      "TotalAmount":4339
+    },
+    "Biolume": {
+      "1":1310,
+      "2":1063,
+      "3":959,
+      "4":655,
+      "5":451,
+      "TotalAmount":4438
+    },
+    "Splinter": {
+      "1":1459,
+      "2":1277,
+      "3":979,
+      "4":747,
+      "5":447,
+      "TotalAmount":4909
+    },
+    "Thornwood": {
+      "1":1559,
+      "2":1291,
+      "3":1030,
+      "4":476,
+      "5":469,
+      "TotalAmount":5135
+    },
+    "Molten": {
+      "1":1622,
+      "2":1410,
+      "3":1125,
+      "4":810,
+      "5":516,
+      "TotalAmount":5483
+    },
+    "Steppes": {
+      "1":1749,
+      "2":1431,
+      "3":1181,
+      "4":846,
+      "5":581,
+      "TotalAmount":5787
+    },
+    "Glacia": {
+      "1":1929,
+      "2":1576,
+      "3":1304,
+      "4":948,
+      "5":636,
+      "TotalAmount":6393
+    },
+    "Bog": {
+      "1":2065,
+      "2":1676,
+      "3":1378,
+      "4":973,
+      "5":683,
+      "TotalAmount":6775
+    }
+  },
+  "resources": {
+    "Dimensional": {
+      "1":76,
+      "2":45,
+      "3":31,
+      "TotalAmount":152
+    },
+    "Fragmentia": {
+      "1":82,
+      "2":57,
+      "3":27,
+      "TotalAmount":166
+    },
+    "Stonecrop": {
+      "1":95,
+      "2":49,
+      "3":24,
+      "TotalAmount":168
+    },
+    "Galactica": {
+      "1":85,
+      "2":53,
+      "3":35,
+      "TotalAmount":173
+    },
+    "Sporicite": {
+      "1":94,
+      "2":58,
+      "3":37,
+      "TotalAmount":189
+    },
+    "Lapidite": {
+      "1":106,
+      "2":58,
+      "3":32,
+      "TotalAmount":196
+    },
+    "Aurelian": {
+      "1":104,
+      "2":64,
+      "3":34,
+      "TotalAmount":202
+    },
+    "Durinia": {
+      "1":130,
+      "2":63,
+      "3":35,
+      "TotalAmount":228
+    },
+    "Elemdnt115": {
+      "1":127,
+      "2":60,
+      "3":42,
+      "TotalAmount":229
+    },
+    "Nucleod": {
+      "1":130,
+      "2":71,
+      "3":37,
+      "TotalAmount":238
+    },
+    "Onyx": {
+      "1":128,
+      "2":73,
+      "3":47,
+      "TotalAmount":248
+    },
+    "Phantom": {
+      "1":131,
+      "2":77,
+      "3":47,
+      "TotalAmount":255
+    },
+    "Senticybia": {
+      "1":134,
+      "2":73,
+      "3":50,
+      "TotalAmount":257
+    },
+    "Gloomia": {
+      "1":128,
+      "2":98,
+      "3":32,
+      "TotalAmount":258
+    },
+    "Entradium": {
+      "1":138,
+      "2":82,
+      "3":40,
+      "TotalAmount":260
+    },
+    "Abyssia": {
+      "1":133,
+      "2":76,
+      "3":54,
+      "TotalAmount":263
+    },
+    "Fossica": {
+      "1":150,
+      "2":84,
+      "3":43,
+      "TotalAmount":277
+    },
+    "Amberskull": {
+      "1":143,
+      "2":84,
+      "3":51,
+      "TotalAmount":278
+    },
+    "Bubonium": {
+      "1":147,
+      "2":92,
+      "3":60,
+      "TotalAmount":299
+    },
+    "Etheria": {
+      "1":185,
+      "2":83,
+      "3":34,
+      "TotalAmount":302
+    },
+    "Degradia": {
+      "1":137,
+      "2":97,
+      "3":69,
+      "TotalAmount":303
+    },
+    "Luminite": {
+      "1":145,
+      "2":106,
+      "3":56,
+      "TotalAmount":307
+    },
+    "Omni": {
+      "1":121,
+      "2":114,
+      "3":73,
+      "TotalAmount":308
+    },
+    "Entropy": {
+      "1":132,
+      "2":118,
+      "3":81,
+      "TotalAmount":331
+    },
+    "Rotworth": {
+      "1":167,
+      "2":101,
+      "3":67,
+      "TotalAmount":337
+    },
+    "Tanglevine": {
+      "1":148,
+      "2":118,
+      "3":71,
+      "TotalAmount":337
+    },
+    "Magentia": {
+      "1":169,
+      "2":109,
+      "3":61,
+      "TotalAmount":339
+    },
+    "Scholara": {
+      "1":171,
+      "2":118,
+      "3":59,
+      "TotalAmount":348
+    },
+    "Ragnarock": {
+      "1":176,
+      "2":105,
+      "3":69,
+      "TotalAmount":350
+    },
+    "Geopillar": {
+      "1":176,
+      "2":105,
+      "3":71,
+      "TotalAmount":352
+    },
+    "Pricklia": {
+      "1":191,
+      "2":102,
+      "3":61,
+      "TotalAmount":354
+    },
+    "Maltosia": {
+      "1":177,
+      "2":112,
+      "3":77,
+      "TotalAmount":366
+    },
+    "Opalia": {
+      "1":169,
+      "2":140,
+      "3":57,
+      "TotalAmount":366
+    },
+    "Mallo": {
+      "1":181,
+      "2":119,
+      "3":72,
+      "TotalAmount":372
+    },
+    "Void": {
+      "1":171,
+      "2":109,
+      "3":97,
+      "TotalAmount":377
+    },
+    "Pyrum": {
+      "1":194,
+      "2":122,
+      "3":62,
+      "TotalAmount":378
+    },
+    "Glowpod": {
+      "1":208,
+      "2":131,
+      "3":70,
+      "TotalAmount":409
+    },
+    "Spiritseep": {
+      "1":222,
+      "2":110,
+      "3":82,
+      "TotalAmount":414
+    },
+    "Obsilica": {
+      "1":214,
+      "2":141,
+      "3":85,
+      "TotalAmount":440
+    },
+    "Sulfirica": {
+      "1":230,
+      "2":133,
+      "3":82,
+      "TotalAmount":445
+    },
+    "Hollowcine": {
+      "1":247,
+      "2":125,
+      "3":75,
+      "TotalAmount":447
+    },
+    "Chlorocite": {
+      "1":236,
+      "2":138,
+      "3":77,
+      "TotalAmount":451
+    },
+    "Prysmatica": {
+      "1":226,
+      "2":134,
+      "3":96,
+      "TotalAmount":456
+    },
+    "Brineslime": {
+      "1":256,
+      "2":137,
+      "3":84,
+      "TotalAmount":477
+    },
+    "Chroma": {
+      "1":256,
+      "2":147,
+      "3":82,
+      "TotalAmount":485
+    },
+    "Coralia": {
+      "1":241,
+      "2":166,
+      "3":79,
+      "TotalAmount":486
+    },
+    "Fortuna": {
+      "1":263,
+      "2":151,
+      "3":97,
+      "TotalAmount":511
+    },
+    "Tanlalite": {
+      "1":251,
+      "2":166,
+      "3":104,
+      "TotalAmount":521
+    },
+    "Steppesalt": {
+      "1":299,
+      "2":164,
+      "3":76,
+      "TotalAmount":539
+    },
+    "Nocturna": {
+      "1":294,
+      "2":156,
+      "3":92,
+      "TotalAmount":542
+    },
+    "Claymer": {
+      "1":297,
+      "2":179,
+      "3":98,
+      "TotalAmount":574
+    },
+    "Duskia": {
+      "1":322,
+      "2":193,
+      "3":92,
+      "TotalAmount":587
+    },
+    "Slaglia": {
+      "1":312,
+      "2":180,
+      "3":109,
+      "TotalAmount":601
+    },
+    "Thermodite": {
+      "1":319,
+      "2":196,
+      "3":109,
+      "TotalAmount":624
+    },
+    "Vaporhaze": {
+      "1":333,
+      "2":206,
+      "3":124,
+      "TotalAmount":663
+    },
+    "Slushia": {
+      "1":335,
+      "2":202,
+      "3":130,
+      "TotalAmount":667
+    },
+    "Nebula": {
+      "1":354,
+      "2":192,
+      "3":121,
+      "TotalAmount":667
+    },
+    "Shatterfrost": {
+      "1":362,
+      "2":235,
+      "3":128,
+      "TotalAmount":725
+    },
+    "Scumbria": {
+      "1":383,
+      "2":242,
+      "3":124,
+      "TotalAmount":749
+    },
+    "Mossmoon": {
+      "1":403,
+      "2":242,
+      "3":127,
+      "TotalAmount":772
+    },
+    "Oblivion": {
+      "1":5570,
+      "2":3406,
+      "3":1935,
+      "TotalAmount":10911
+    },
+    "Kinsoul": {
+      "1":5763,
+      "2":3383,
+      "3":1852,
+      "TotalAmount":10998
+    },
+    "Spikeweed": {
+      "1":5592,
+      "2":3437,
+      "3":1976,
+      "TotalAmount":11005
+    },
+    "Lunarian": {
+      "1":5651,
+      "2":3429,
+      "3":1964,
+      "TotalAmount":11044
+    },
+    "Runa": {
+      "1":5678,
+      "2":3434,
+      "3":1974,
+      "TotalAmount":11086
+    },
+    "Petrified": {
+      "1":5660,
+      "2":3535,
+      "3":1903,
+      "TotalAmount":11098
+    },
+    "Brimstone": {
+      "1":5741,
+      "2":3460,
+      "3":1946,
+      "TotalAmount":11147
+    },
+    "Moldium": {
+      "1":5722,
+      "2":3477,
+      "3":1972,
+      "TotalAmount":11171
+    },
+    "Bonestone": {
+      "1":5768,
+      "2":3457,
+      "3":2013,
+      "TotalAmount":11238
+    },
+    "Nether": {
+      "1":5824,
+      "2":3841,
+      "3":1943,
+      "TotalAmount":11248
+    },
+    "Luster": {
+      "1":5740,
+      "2":3550,
+      "3":1977,
+      "TotalAmount":11267
+    },
+    "Whisper": {
+      "1":5803,
+      "2":3509,
+      "3":1977,
+      "TotalAmount":11289
+    },
+    "Lumileaf": {
+      "1":5798,
+      "2":3536,
+      "3":2016,
+      "TotalAmount":11350
+    },
+    "Psychosilk": {
+      "1":5855,
+      "2":3565,
+      "3":1950,
+      "TotalAmount":11370
+    }
+  },
+  "artifacts": {
+    "Sword of Chosen":1,
+    "Archway":1,
+    "Archway Keystone":1,
+    "Blade of Eternum":1,
+    "Celestial Egg":1,
+    "Foretelling Scroll":1,
+    "Mirror Mirror":1,
+    "Mystery Potion":1,
+    "Pandoras Box":1,
+    "Yellow Obelick":5,
+    "Red Obelick":5,
+    "Green Obelick":5,
+    "Relic Book Page":6,
+    "Portal Oiece":10,
+    "Chest of Holding":50,
+    "Blue Orb":60,
+    "Red Orb":60,
+    "Unkown Map":60,
+    "Yelow Orb":60,
+    "Toto":90,
+    "Mia":90,
+    "Raven":90,
+    "Tavo":90,
+    "Z":90,
+    "Anthony":90,
+    "Chomps":90,
+    "Cryptid":90,
+    "Leo":90,
+    "Romain":90,
+    "Whim":90,
+    "Lapis":90,
+    "Lovans":90,
+    "Santiago":90,
+    "Vivec":90,
+    "Jules":90,
+    "Tazer":90,
+    "Marcin":90,
+    "Daniel":90,
+    "Mecha Piece":100,
+    "Koda Hammer":130,
+    "Koda Shovel":130,
+    "Koda Axe":130,
+    "Celestial Heart":350,
+    "Mystical Crown":425,
+    "CardFrom a Deck":425,
+    "Sloth Juice":425,
+    "Fairy in a Jar":425,
+    "Fordeg Shovel":450,
+    "Forged Pickaxe":450,
+    "Magic Powder":450,
+    "Forged Axe":450,
+    "Knights Pail":450,
+    "Forged Hammer":450,
+    "Sooper Box":500,
+    "Camp Fire":500,
+    "Monkey Barrel":525,
+    "Celestial Orb":525,
+    "Jar of Koda Farts":525,
+    "Celestial Tear":550,
+    "Whale Statue":575,
+    "Relic Card":600,
+    "Sands of Time":625,
+    "Glass Eye":650,
+    "Mystic Triangles":675,
+    "Fire Sale Scroll":700,
+    "Slime Juice":725,
+    "Sticky Cauldron":750,
+    "Rugged Pickaxe":900,
+    "Rugged Axe":900,
+    "Banana Peel":900,
+    "Rugged Shovel":900,
+    "Rugged Hammer":900,
+    "Ancient Coin":1000
+  }
+}

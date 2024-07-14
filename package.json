@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "axios": "^1.7.2",
+    "etherscan-api": "^10.3.0",
+    "git": "^0.1.5",
+    "node-telegram-bot-api": "0.66.0",
+    "telegraf": "^4.16.3",
+    "terminal-image": "^2.0.0"
+  }
+}
