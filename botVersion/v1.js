@@ -175,7 +175,7 @@ async function filterEarthAttributes(id) {
 async function calculateRarity(id) {
   let infoEarth = await filterEarthAttributes(id);
   const fs = require('fs').promises;
-  var filePath = '/Users/new/Desktop/Otherdeed/Attributes.json'
+  var filePath = '../Attributes.json';
   const data = await fs.readFile(filePath, 'utf8');
   const attributes = JSON.parse(data);
   let EarthData = {};

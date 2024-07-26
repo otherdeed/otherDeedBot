@@ -5,29 +5,6 @@ const bot = new TelegramBot('7171580107:AAFqiIAXr_WkZheoOjjFrSowRsa9wLTdQpc', {
         autoStart: true
     }
 });
-bot.on("polling_error", err => {
-    if (err && err.data && err.data.error) {
-        console.log(err.data.error.message);
-    } else {
-        console.error('Произошла ошибка при опросе:', err);
-    }
-});
-const commands = [{
-        command: "floor",
-        description: "Floor price Otherdeed"
-    },
-    {
-        command: "search",
-        description: "Otherdeed information by tokenId"
-    },
-    {
-        command: "info",
-        description: "Documentation"
-    }
-
-]
-bot.setMyCommands(commands);
-
 
 async function getAttributes(id) {
     const options = {
@@ -180,7 +157,7 @@ async function filterEarthAttributes(id) {
 async function calculateRarity(id) {
     let infoEarth = await filterEarthAttributes(id);
     const fs = require('fs').promises;
-    var filePath = '/Users/new/Desktop/Otherdeed/Attributes.json'
+    var filePath = '../Attributes.json';
     const data = await fs.readFile(filePath, 'utf8');
     const attributes = JSON.parse(data);
     let EarthData = {};
@@ -329,20 +306,6 @@ async function getFloorPrice() {
     return floorId
 }
 
-async function informationAtAFloorPrice(count) {
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: '*/*',
-            Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
-        }
-    };
-    const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&sortBy=floorAskPrice&limit=10&includeTopBid=false&excludeEOA=false&includeAttributes=True&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
-    const data = await response.json()
-    const dataInfo = data.tokens[count].token.tokenId
-    return dataInfo
-}
-
 function timeConverter(timestamp) {
     let a = new Date(timestamp * 1000);
     let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -364,194 +327,101 @@ function timeConverter(timestamp) {
     let time = `${hour}:${min}:${sec} ${date} ${month} ${year}`
     return time
 }
-
-function keyboardButtons(id) {
-    const keyboard = [
-        [{
-            text: 'Показать атрибуты',
-            callback_data: 'attributes'
-        }],
-        [{
-            text: 'Показать оценку редкости',
-            callback_data: 'rarity'
-        }],
-        [{
-            text: 'Купить землю',
-            url: `https://magiceden.io/collections/ethereum/otherdeed?evmItemDetailsModal=1~0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258~${id}`
-        }],
-        [{
-            text: 'Показать следующую землю',
-            callback_data: 'next'
-        }]
-
-    ]
-    return keyboard
-}
-const BackKeyboard = [
+let moreInfo = false;
+let currentQueryHandler = null;
+const linkKeyboard = [
     [{
-        text: 'Назад',
-        callback_data: 'back'
-    }],
-]
-const startKeyboard = [
-    [{
-        text: 'Самая дешевая земля',
-        callback_data: 'startFloor'
+      text: "MagicEden",
+      url: "https://magiceden.io/",
     }],
     [{
-        text: 'Найти землю по ID',
-        callback_data: 'startSearch'
+      text: "Коллекция Otherdeed",
+      url: "https://magiceden.io/collections/ethereum/otherdeed",
     }],
-    [{
-        text: 'Почитать инструкцию',
-        callback_data: 'startDocumentation'
-    }],
-]
-
-function deleteKeyboard(id) {
-    let keyboard = keyboardButtons(id)
-    keyboard = keyboard.filter(item => item[0].callback_data != 'next')
-    return keyboard
-}
-
-let lastMessageId = null;
-let moreInfo = false
-let count = 0
-let hasBeenCalled = false;
-async function commnandFloor(msg) {
-    if (msg.text == '/floor') {
-        if (lastMessageId) {
-            await bot.deleteMessage(msg.chat.id, lastMessageId);
-        }
-        const dataInfo = await informationAtAFloorPrice(count)
-        const infoEarth = await getInfoEarth(dataInfo)
-        const Keyboard = keyboardButtons(dataInfo)
-        const sentMessage = await bot.sendMessage(msg.chat.id, `${infoEarth.image}\nЦена земли равна:\n${infoEarth.usdPrice}USD(${infoEarth.ethPrice}ETH)`, {
-            reply_markup: {
-                inline_keyboard: Keyboard
-            }
-        });
-        lastMessageId = sentMessage.message_id;
-        bot.on('callback_query', async (query) => {
-            if (query.data === 'attributes') {
-                if (lastMessageId) {
-                    await bot.deleteMessage(msg.chat.id, lastMessageId);
-                }
-                const backMessage = await bot.sendMessage(msg.chat.id, `${attributes}`, {
-                    reply_markup: {
-                        inline_keyboard: BackKeyboard
-                    }
-                });
-                lastMessageId = backMessage.message_id;
-            }
-            if (query.data === 'rarity') {
-                const rarity = await conclusionRarity(msg.text);
-                if (lastMessageId) {
-                    await bot.deleteMessage(msg.chat.id, lastMessageId);
-                }
-                const backMessage = await bot.sendMessage(msg.chat.id, `Редкость: ${rarity}`, {
-                    reply_markup: {
-                        inline_keyboard: BackKeyboard
-                    }
-                });
-                lastMessageId = backMessage.message_id;
-            }
-            if (query.data === 'back') {
-                if (lastMessageId) {
-                    await bot.deleteMessage(msg.chat.id, lastMessageId);
-                }
-                const sentMessage = await bot.sendMessage(msg.chat.id, `${infoEarth.image}\nЦена земли равна:\n${infoEarth.usdPrice}USD(${infoEarth.ethPrice}ETH)`, {
-                    reply_markup: {
-                        inline_keyboard: Keyboard
-                    }
-                });
-                lastMessageId = sentMessage.message_id;
-            }
-        })
-    }
-}
-async function deleteLastMessage(chatId) {
-    if (lastMessageId) {
-        try {
-            await bot.deleteMessage(chatId, lastMessageId);
-        } catch (error) {
-            console.error('Ошибка удаления сообщения:', error.message);
-        }
-    }
-}
-async function commandStart(msg) {
+  ];
+async function startCommand(msg) {
     if (msg.text === '/start') {
-        await deleteLastMessage(msg.chat.id);
-        const startMessage = await bot.sendMessage(msg.chat.id, 'Привет! Это бот, который поможет тебе найти самую землю в Otherside. Какую операцию хочешь выполнить?', {
+        await bot.sendMessage(msg.chat.id, 'Привет! Это бот, который поможет тебе найти самую в Otherside. Какую операцию хочешь выполнить?', {
             reply_markup: {
-                inline_keyboard: startKeyboard
+                keyboard: [
+                    ['Самая дешевая земля', 'Найти землю по ID'],
+                    ['Инструкция']
+                ],
+                resize_keyboard: true
             }
         });
-        lastMessageId = startMessage.message_id;
+    }
+
+    if (msg.text === 'Самая дешевая земля') {
+        await commandFloor(msg);
+    }
+
+    if (msg.text === 'Найти землю по ID') {
+        await commandSearch(msg);
+    }
+    if(msg.text === 'Инструкция'){
+        await bot.sendMessage(msg.chat.id,'Этот бот был создан с целью помочь вам в покупке земли в коллекции NFT «Othredeed for Otherside».')
+        await bot.sendMessage(msg.chat.id, 'Бот взаимодействует с торговой площадкой NFT MagicEden, берет с неё информацию о земле, и на основе алгоритмов выдаёт рекомендацию. Внимание!!! Бот всего лишь выдаёт рекомендацию на основе алгоритмов, решение о покупки земли лежит только на вас.',{reply_markup: {inline_keyboard: linkKeyboard,},});
+        await bot.sendMessage(msg.chat.id,'Функционал:\n Кнопка “Самая дешевая земля”- показывает самую дешёвую землю на торговой площадке NFT MagicEden\n Кнопка “Найти землю по ID ”- команда даёт возможность посмотреть интересующию вас землю на торговой площадке NFT MagicEden\nИнструкция по поиску земли по ID:\n 1) Заходим на MagicEden(сслыка) находим коллекцию «Othredeed for Otherside».\n 2) Выбираем землю.\n 3) Берём её TokenID и отправляем боту.');
     }
 }
 
-bot.on('callback_query', async (query) => {
-    const chatId = query.message.chat.id;
-    await deleteLastMessage(chatId);
-
-    if (query.data === 'startSearch') {
-        const idValue = await bot.sendMessage(chatId, 'введите ID земли');
-        lastMessageId = idValue.message_id;
-        moreInfo = true;
-    }
-
-    bot.on('message', async msg => {
-        if (moreInfo && msg.text.length === 5 && /^\d+$/.test(msg.text) && msg.text.charAt(0) !== '/') {
-            moreInfo = false;  // Предотвращение повторного срабатывания обработчика
-
-            let infoEarth = await getInfoEarth(msg.text);
-            let attributes = await msgBotAttributes(msg.text);
-            let rarity = await conclusionRarity(msg.text);
-            let Keyboard = deleteKeyboard(msg.text);
-
-            await deleteLastMessage(chatId);
-
-            let sentMessage = await bot.sendMessage(chatId, `${infoEarth.image}\nЦена земли равна:\n${infoEarth.usdPrice}USD(${infoEarth.ethPrice}ETH)`, {
+async function commandFloor(msg) {
+    const floorId = await getFloorPrice();
+    const infoEarth = await getInfoEarth(floorId);
+    const attributes = await msgBotAttributes(floorId);
+    const rarity = await conclusionRarity(floorId);
+    await bot.sendMessage(msg.chat.id, `Цена данной земли равна:\n${infoEarth.usdPrice}USD(${infoEarth.ethPrice}ETH)`)
+            await bot.sendPhoto(msg.chat.id, infoEarth.image)
+            await bot.sendMessage(msg.chat.id, `${attributes}`)
+            await bot.sendMessage(msg.chat.id, `Оценка: ${rarity}`,{
                 reply_markup: {
-                    inline_keyboard: Keyboard
+                    keyboard: [
+                        ['Самая дешевая земля', 'Найти землю по ID'],
+                        ['Инструкция']
+                    ],
+                    resize_keyboard: true
                 }
             });
-            lastMessageId = sentMessage.message_id;
+}
 
-            bot.on('callback_query', async (query) => {
-                await deleteLastMessage(chatId);
+async function commandSearch(msg) {
+    await bot.sendMessage(msg.chat.id, 'Введите ID земли',{
+        reply_markup: {
+          remove_keyboard: true,
+        },
+      });
+    moreInfo = true;
 
-                if (query.data === 'attributes') {
-                    let backMessage = await bot.sendMessage(chatId, `${attributes}`, {
-                        reply_markup: {
-                            inline_keyboard: BackKeyboard
-                        }
-                    });
-                    lastMessageId = backMessage.message_id;
-                }
-                if (query.data === 'rarity') {
-                    let backMessage = await bot.sendMessage(chatId, `Редкость: ${rarity}`, {
-                        reply_markup: {
-                            inline_keyboard: BackKeyboard
-                        }
-                    });
-                    lastMessageId = backMessage.message_id;
-                }
-                if (query.data === 'back') {
-                    let sentMessage = await bot.sendMessage(chatId, `${infoEarth.image}\nЦена земли равна:\n${infoEarth.usdPrice}USD(${infoEarth.ethPrice}ETH)`, {
-                        reply_markup: {
-                            inline_keyboard: Keyboard
-                        }
-                    });
-                    lastMessageId = sentMessage.message_id;
+    if (currentQueryHandler) {
+        bot.removeListener('text', currentQueryHandler);
+    }
+
+    currentQueryHandler = async (msg) => {
+        if (msg.text.length === 5 && moreInfo && /^\d+$/.test(msg.text)) {
+            moreInfo = false;
+            const infoEarth = await getInfoEarth(msg.text);
+            const attributes = await msgBotAttributes(msg.text);
+            const rarity = await conclusionRarity(msg.text);
+
+            await bot.sendMessage(msg.chat.id, `Цена данной земли равна:\n${infoEarth.usdPrice}USD(${infoEarth.ethPrice}ETH)`)
+            await bot.sendPhoto(msg.chat.id, infoEarth.image)
+            await bot.sendMessage(msg.chat.id, `${attributes}`)
+            await bot.sendMessage(msg.chat.id, `Оценка: ${rarity}`,{
+                reply_markup: {
+                    keyboard: [
+                        ['Самая дешевая земля', 'Найти землю по ID'],
+                        ['Инструкция']
+                    ],
+                    resize_keyboard: true
                 }
             });
         }
-    });
-});
+    };
 
-// Обработчик команды /start
-bot.on('message', async msg => {
-    await commandStart(msg);
+    bot.on('text', currentQueryHandler);
+}
+
+bot.on('text', async (msg) => {
+    startCommand(msg);
 });
