@@ -1,3 +1,4 @@
+const { log } = require('console');
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot('7171580107:AAFqiIAXr_WkZheoOjjFrSowRsa9wLTdQpc', {
     polling: {
@@ -5,7 +6,16 @@ const bot = new TelegramBot('7171580107:AAFqiIAXr_WkZheoOjjFrSowRsa9wLTdQpc', {
         autoStart: true
     }
 });
+const botErorr = new TelegramBot('7074118463:AAEpq0E6fnG_8QE3znqjTGJUN7dmD4FEKYQ', {
+    polling: {
+        interval: 300,
+        autoStart: true
+    }
+});
 
+bot.on('polling_error', (err) => {
+    console.log(err.data.error.message)
+});
 async function getAttributes(id) {
     const options = {
         method: 'GET',
@@ -100,40 +110,45 @@ async function getAttributes(id) {
     return Attributes;
 }
 async function getInfoEarth(id) {
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: '*/*',
-            Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
+    try{
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: '*/*',
+                Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
+            }
+        };
+        const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&tokenName=${id}&sortBy=floorAskPrice&limit=1&includeTopBid=false&excludeEOA=false&includeAttributes=True&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
+        const data = await response.json()
+        // console.log(data.tokens[0].token.tokenId)
+        const Attributes = await getAttributes(id)
+        const dataEarth = await data.tokens[0]
+        const infoEarth = {
+            id: dataEarth.token.tokenId,
+            contract: dataEarth.token.contract,
+            usdPrice: dataEarth.market.floorAsk && dataEarth.market.floorAsk.price && dataEarth.market.floorAsk.price.amount ? dataEarth.market.floorAsk.price.amount.usd.toFixed(2) : 'N/A',
+            ethPrice: dataEarth.market.floorAsk && dataEarth.market.floorAsk.price && dataEarth.market.floorAsk.price.amount ? dataEarth.market.floorAsk.price.amount.native.toFixed(4) : 'N/A',
+            image: dataEarth.token.imageLarge,
+            sediment: Attributes.sediment.names,
+            environment: Attributes.environment.names,
+            sedimentTier: Attributes.sediment.tier,
+            environmentTier: Attributes.environment.tier,
+            nResource: Attributes.nResource.names,
+            nResourceTier: Attributes.nResource.tier,
+            sResource: Attributes.sResource.names,
+            sResourceTier: Attributes.sResource.tier,
+            wResource: Attributes.wResource.names,
+            wResourceTier: Attributes.wResource.tier,
+            eResource: Attributes.eResource.names,
+            eResourceTier: Attributes.eResource.tier,
+            artifact: Attributes.artifact.names,
+            koda: Attributes.koda
         }
-    };
-    const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&tokenName=${id}&sortBy=floorAskPrice&limit=1&includeTopBid=false&excludeEOA=false&includeAttributes=True&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
-    const data = await response.json()
-    // console.log(data.tokens[0].token.tokenId)
-    const Attributes = await getAttributes(id)
-    const dataEarth = await data.tokens[0]
-    const infoEarth = {
-        id: dataEarth.token.tokenId,
-        contract: dataEarth.token.contract,
-        usdPrice: dataEarth.market.floorAsk && dataEarth.market.floorAsk.price && dataEarth.market.floorAsk.price.amount ? dataEarth.market.floorAsk.price.amount.usd.toFixed(2) : 'N/A',
-        ethPrice: dataEarth.market.floorAsk && dataEarth.market.floorAsk.price && dataEarth.market.floorAsk.price.amount ? dataEarth.market.floorAsk.price.amount.native.toFixed(4) : 'N/A',
-        image: dataEarth.token.imageLarge,
-        sediment: Attributes.sediment.names,
-        environment: Attributes.environment.names,
-        sedimentTier: Attributes.sediment.tier,
-        environmentTier: Attributes.environment.tier,
-        nResource: Attributes.nResource.names,
-        nResourceTier: Attributes.nResource.tier,
-        sResource: Attributes.sResource.names,
-        sResourceTier: Attributes.sResource.tier,
-        wResource: Attributes.wResource.names,
-        wResourceTier: Attributes.wResource.tier,
-        eResource: Attributes.eResource.names,
-        eResourceTier: Attributes.eResource.tier,
-        artifact: Attributes.artifact.names,
-        koda: Attributes.koda
+        return infoEarth
+    }catch(erorr){
+        botErorr.sendMessage(1875576355, 'Сейчас бот перегружен, попробуйте позже.');
+        console.log(erorr);
     }
-    return infoEarth
 }
 
 async function filterEarthAttributes(id) {
