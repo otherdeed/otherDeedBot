@@ -1,3 +1,4 @@
+const { log } = require('console');
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot('7171580107:AAFqiIAXr_WkZheoOjjFrSowRsa9wLTdQpc', {
     polling: {
@@ -144,8 +145,9 @@ async function getInfoEarth(id) {
             koda: Attributes.koda
         }
         return infoEarth
-    }catch{
+    }catch(erorr){
         botErorr.sendMessage(1875576355, 'Сейчас бот перегружен, попробуйте позже.');
+        console.log(erorr);
     }
 }
 
