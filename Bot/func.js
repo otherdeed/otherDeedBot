@@ -1,62 +1,4 @@
-import TelegramBot from 'node-telegram-bot-api';
-const bot = new TelegramBot('7171580107:AAFqiIAXr_WkZheoOjjFrSowRsa9wLTdQpc', {
-    polling: {
-        interval: 300,
-        autoStart: true
-    }
-});
-const botErorr = new TelegramBot('7074118463:AAEpq0E6fnG_8QE3znqjTGJUN7dmD4FEKYQ', {
-    polling: {
-        interval: 300,
-        autoStart: true
-    }
-});
-const commands = [{
-    command: "floor",
-    description: "Floor price Otherdeed",
-  },
-  {
-    command: "search",
-    description: "Otherdeed information by tokenId",
-  },
-  {
-    command: "info",
-    description: "Documentation",
-  },
-  {
-    command: "help",
-    description: "Feedback",
-  }
-];
-bot.setMyCommands(commands);
-let users = {};  // Инициализация объекта для хранения пользователей
-let cnt = 0;  // Инициализация счетчика
-let user = []
-
-async function getUser(msg) {
-    cnt += 1;
-    let userName = '@' + msg.chat.username;
-
-    // Проверка наличия пользователя
-    if (users.hasOwnProperty(userName)) {
-        console.log('user exists');
-    } else {
-        console.log('user not exists');
-        users[userName] = cnt;
-        user.push(users);
-    }
-
-    console.log(users);
-    console.log(user);
-}
-botErorr.on('message',async (msg)=>{
-    let message = await botErorr.sendMessage(msg.chat.id,'users')
-})
-
-bot.on('polling_error', (err) => {
-    console.log(err.data.error.message)
-});
-async function getAttributes(id) {
+export async function getAttributes(id) {
     const options = {
         method: 'GET',
         headers: {
@@ -64,9 +6,9 @@ async function getAttributes(id) {
             Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
         }
     };
-    const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&tokenName=${id}&sortBy=floorAskPrice&limit=1&includeTopBid=false&excludeEOA=false&includeAttributes=True&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
+    const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=0x790b2cf29ed4f310bf7641f013c65d4560d28371&tokenName=${id}&sortBy=floorAskPrice&limit=20&includeTopBid=false&excludeEOA=false&includeAttributes=true&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
     const data = await response.json()
-    const dataAttributes = data.tokens[0].token.attributes
+    const dataAttributes = await data.tokens[0].token.attributes
     let Attributes = {
         sediment: {
             names: '',
@@ -147,10 +89,11 @@ async function getAttributes(id) {
         }
     }
     getEarthKoda('Koda', 'koda')
+    console.log(Attributes);
     return Attributes;
 }
-async function getInfoEarth(id) {
-    try{
+export async function getInfoEarth(id) {
+    try {
         const options = {
             method: 'GET',
             headers: {
@@ -185,13 +128,12 @@ async function getInfoEarth(id) {
             koda: Attributes.koda
         }
         return infoEarth
-    }catch(erorr){
-        botErorr.sendMessage(1875576355, 'Сейчас бот перегружен, попробуйте позже.');
+    } catch (erorr) {
         console.log(erorr);
     }
 }
 
-async function filterEarthAttributes(id) {
+export async function filterEarthAttributes(id) {
     let infoEarth = await getInfoEarth(id)
 
     function deleteEmpty(objKey, objTierKey) {
@@ -208,13 +150,13 @@ async function filterEarthAttributes(id) {
     deleteEmpty('koda', 'koda');
     return infoEarth
 }
-
 import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-async function calculateRarity(id) {
+
+export async function calculateRarity(id) {
     let infoEarth = await filterEarthAttributes(id);
     const filePath = path.resolve(__dirname, '../Attributes.json');
     const data = await fs.readFile(filePath, 'utf8');
@@ -257,7 +199,7 @@ async function calculateRarity(id) {
     const totalRarity = (RaritySidement + RarityEnvironment + RarityNResource + RaritySResource + RarityEResource + RarityWResource).toFixed(2);
     return totalRarity
 }
-async function msgBotAttributes(id) {
+export async function msgBotAttributes(id) {
     let infoEarth = await filterEarthAttributes(id);
 
     function msgBotDecor(objKey) {
@@ -325,7 +267,7 @@ async function msgBotAttributes(id) {
     return mess;
 }
 
-async function conclusionRarity(id) {
+export async function conclusionRarity(id) {
     const rarity = await calculateRarity(id);
     const infoEarth = await filterEarthAttributes(id);
     const minPrice = 0.141
@@ -334,14 +276,14 @@ async function conclusionRarity(id) {
     let Rarity = rarity * differencePrice
     let k = (Price / Rarity).toFixed(3);
     if (infoEarth.artifact && infoEarth.artifact.length > 0) {
-        return 'На данный момент бот не умеет считать редкость земли с Артефактом 😔';
+        return 'На данный момент бот не уммет считать редкость земли с Артефактом 😔';
     }
     if (infoEarth.koda == true) {
-        return 'На данный момент бот не умеет считать редкость земли с Koda 😔';
+        return 'На данный момент бот не уммет считать редкость земли с Koda 😔';
     }
     if (k < 0.06) {
         return 'Эта цена ниже рыночной';
-    } else if (k >= 0.06 && k < 0.09) {  
+    } else if (k >= 0.06 && k < 0.09) {
         return 'Эта цена немного ниже рыночной';
     } else if (k >= 0.09 && k < 0.12) {
         return 'Эта цена соответствует рынку'
@@ -351,7 +293,7 @@ async function conclusionRarity(id) {
         return 'Эта цена сильно выше рынка'
     }
 }
-async function getFloorPrice() {
+export async function getFloorPrice() {
     const options = {
         method: 'GET',
         headers: {
@@ -365,130 +307,4 @@ async function getFloorPrice() {
     return floorId
 }
 
-function timeConverter(timestamp) {
-    let a = new Date(timestamp * 1000);
-    let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    let year = a.getFullYear();
-    let month = months[a.getMonth()];
-    let date = a.getDate();
-    let hour = a.getHours();
-    let min = a.getMinutes();
-    let sec = a.getSeconds();
-    if (sec <= 9) {
-        sec = `0${sec}`
-    }
-    if (min <= 9) {
-        min = `0${min}`
-    }
-    if (hour <= 9) {
-        hour = `0${hour}`
-    }
-    let time = `${hour}:${min}:${sec} ${date} ${month} ${year}`
-    return time
-}
-let moreInfo = false;
-let currentQueryHandler = null;
-const linkKeyboard = [
-    [{
-      text: "MagicEden",
-      url: "https://magiceden.io/",
-    }],
-    [{
-      text: "Коллекция Otherdeed",
-      url: "https://magiceden.io/collections/ethereum/otherdeed",
-    }],
-  ];
-async function startCommand(msg) {
-    if (msg.text === '/start') {
-        await bot.sendMessage(msg.chat.id, 'Привет! Это бот, который поможет тебе найти самую в Otherside. Какую операцию хочешь выполнить?', {
-            reply_markup: {
-                keyboard: [
-                    ['Самая дешевая земля', 'Найти землю по ID'],
-                    ['Инструкция','Обратная связь']
-                ],
-                resize_keyboard: true
-            }
-        });
-    }
 
-    if (msg.text === 'Самая дешевая земля' || msg.text === '/floor') {
-        await commandFloor(msg);
-    }
-
-    if (msg.text === 'Найти землю по ID' || msg.text === '/search') {
-        await commandSearch(msg);
-    }
-    if(msg.text === 'Инструкция' || msg.text === '/info'){
-        await bot.sendMessage(msg.chat.id,'Этот бот был создан с целью помочь вам в покупке земли в коллекции NFT «Othredeed for Otherside».')
-        await bot.sendMessage(msg.chat.id, 'Бот взаимодействует с торговой площадкой NFT MagicEden, берет с неё информацию о земле, и на основе алгоритмов выдаёт рекомендацию. Внимание!!! Бот всего лишь выдаёт рекомендацию на основе алгоритмов, решение о покупки земли лежит только на вас.',{reply_markup: {inline_keyboard: linkKeyboard,},});
-        await bot.sendMessage(msg.chat.id,'Функционал:\n Кнопка “Самая дешевая земля”- показывает самую дешёвую землю на торговой площадке NFT MagicEden\n Кнопка “Найти землю по ID ”- команда даёт возможность посмотреть интересующию вас землю на торговой площадке NFT MagicEden\nИнструкция по поиску земли по ID:\n 1) Заходим на MagicEden находим коллекцию «Othredeed for Otherside».\n 2) Выбираем землю.\n 3) Берём её TokenID и отправляем боту.');
-    }
-    if(msg.text === 'Обратная связь' || msg.text === '/help'){
-        await bot.sendMessage(msg.chat.id,'Если у вас есть вопросы или желания помочь, вы можете обратиться ко мне в любое время. Мой создатель - @ttimmur, он всегда готов помочь.');
-    }
-}
-
-async function commandFloor(msg) {
-    const floorId = await getFloorPrice();
-    const infoEarth = await getInfoEarth(floorId);
-    const attributes = await msgBotAttributes(floorId);
-    const rarity = await conclusionRarity(floorId);
-    await bot.sendMessage(msg.chat.id, `Цена данной земли равна:\n${infoEarth.usdPrice}USD(${infoEarth.ethPrice}ETH)`)
-            await bot.sendPhoto(msg.chat.id, infoEarth.image)
-            await bot.sendMessage(msg.chat.id, `${attributes}`)
-            await bot.sendMessage(msg.chat.id, `Оценка: ${rarity}`,{
-                reply_markup: {
-                    keyboard: [
-                        ['Самая дешевая земля', 'Найти землю по ID'],
-                        ['Инструкция','Обратная связь']
-                    ],
-                    resize_keyboard: true
-                }
-            });
-}
-
-async function commandSearch(msg) {
-    await bot.sendMessage(msg.chat.id, 'Введите ID земли',{
-        reply_markup: {
-          remove_keyboard: true,
-        },
-      });
-    moreInfo = true;
-
-    if (currentQueryHandler) {
-        bot.removeListener('text', currentQueryHandler);
-    }
-
-    currentQueryHandler = async (msg) => {
-        if (msg.text.length >= 3 && moreInfo && /^\d+$/.test(msg.text)) {
-            moreInfo = false;
-            const infoEarth = await getInfoEarth(msg.text);
-            const attributes = await msgBotAttributes(msg.text);
-            const rarity = await conclusionRarity(msg.text);
-
-            await bot.sendMessage(msg.chat.id, `Цена данной земли равна:\n${infoEarth.usdPrice}USD(${infoEarth.ethPrice}ETH)`)
-            await bot.sendPhoto(msg.chat.id, infoEarth.image)
-            await bot.sendMessage(msg.chat.id, `${attributes}`)
-            await bot.sendMessage(msg.chat.id, `Оценка: ${rarity}`,{
-                reply_markup: {
-                    keyboard: [
-                        ['Самая дешевая земля', 'Найти землю по ID'],
-                        ['Инструкция','Обратная связь']
-                    ],
-                    resize_keyboard: true
-                }
-            });
-        }
-    };
-
-    bot.on('text', currentQueryHandler);
-}
-
-
-bot.on('text', async (msg) => {
-    let tokenID = msg.text
-    let time = timeConverter(msg.date)
-    console.log(`пользователь @${msg.chat.username} отправил сообщение ${tokenID} в ${time} `)
-    // getUser(msg)
-    startCommand(msg);
-});
