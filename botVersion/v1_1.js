@@ -1,4 +1,3 @@
-const { log } = require('console');
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot('7171580107:AAFqiIAXr_WkZheoOjjFrSowRsa9wLTdQpc', {
     polling: {
@@ -172,7 +171,8 @@ async function filterEarthAttributes(id) {
 async function calculateRarity(id) {
     let infoEarth = await filterEarthAttributes(id);
     const fs = require('fs').promises;
-    var filePath = '../Attributes.json';
+    const path = require('path');
+    const filePath = path.resolve(__dirname, '../Attributes.json');
     const data = await fs.readFile(filePath, 'utf8');
     const attributes = JSON.parse(data);
     let EarthData = {};
