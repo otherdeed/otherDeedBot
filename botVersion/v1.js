@@ -1,5 +1,3 @@
-//я надесюсь это финальная версия бота
-// реализовано: надо дописать!!!!
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot('7171580107:AAFqiIAXr_WkZheoOjjFrSowRsa9wLTdQpc', {
   polling: {

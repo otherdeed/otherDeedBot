@@ -1,4 +1,8 @@
-export async function getAttributes(id) {
+import { log } from 'console';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+export async function getAttributes(contract,id) {
     const options = {
         method: 'GET',
         headers: {
@@ -6,7 +10,7 @@ export async function getAttributes(id) {
             Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
         }
     };
-    const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=0x790b2cf29ed4f310bf7641f013c65d4560d28371&tokenName=${id}&sortBy=floorAskPrice&limit=20&includeTopBid=false&excludeEOA=false&includeAttributes=true&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
+    const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=${contract}&tokenName=${id}&sortBy=floorAskPrice&limit=20&includeTopBid=false&excludeEOA=false&includeAttributes=true&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
     const data = await response.json()
     const dataAttributes = await data.tokens[0].token.attributes
     let Attributes = {
@@ -92,7 +96,7 @@ export async function getAttributes(id) {
     console.log(Attributes);
     return Attributes;
 }
-export async function getInfoEarth(id) {
+export async function getInfoEarth(contract,id) {
     try {
         const options = {
             method: 'GET',
@@ -101,7 +105,7 @@ export async function getInfoEarth(id) {
                 Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
             }
         };
-        const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&tokenName=${id}&sortBy=floorAskPrice&limit=1&includeTopBid=false&excludeEOA=false&includeAttributes=True&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
+        const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=${contract}&tokenName=${id}&sortBy=floorAskPrice&limit=1&includeTopBid=false&excludeEOA=false&includeAttributes=True&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
         const data = await response.json()
         // console.log(data.tokens[0].token.tokenId)
         const Attributes = await getAttributes(id)
@@ -127,14 +131,15 @@ export async function getInfoEarth(id) {
             artifact: Attributes.artifact.names,
             koda: Attributes.koda
         }
+        console.log(infoEarth);
         return infoEarth
     } catch (erorr) {
         console.log(erorr);
     }
 }
 
-export async function filterEarthAttributes(id) {
-    let infoEarth = await getInfoEarth(id)
+export async function filterEarthAttributes(contract,id) {
+    let infoEarth = await getInfoEarth(contract,id)
 
     function deleteEmpty(objKey, objTierKey) {
         if (infoEarth[objKey] == '' || infoEarth[objTierKey] == false) {
@@ -150,14 +155,11 @@ export async function filterEarthAttributes(id) {
     deleteEmpty('koda', 'koda');
     return infoEarth
 }
-import { promises as fs } from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-export async function calculateRarity(id) {
-    let infoEarth = await filterEarthAttributes(id);
+export async function calculateRarity(contract,id) {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    let infoEarth = await filterEarthAttributes(contract,id);
     const filePath = path.resolve(__dirname, '../Attributes.json');
     const data = await fs.readFile(filePath, 'utf8');
     const attributes = JSON.parse(data);
@@ -199,8 +201,8 @@ export async function calculateRarity(id) {
     const totalRarity = (RaritySidement + RarityEnvironment + RarityNResource + RaritySResource + RarityEResource + RarityWResource).toFixed(2);
     return totalRarity
 }
-export async function msgBotAttributes(id) {
-    let infoEarth = await filterEarthAttributes(id);
+export async function msgBotAttributes(contract,id) {
+    let infoEarth = await filterEarthAttributes(contract,id);
 
     function msgBotDecor(objKey) {
         let inf = '';
@@ -266,10 +268,10 @@ export async function msgBotAttributes(id) {
     let mess = checkMsgBotDecor()
     return mess;
 }
-
-export async function conclusionRarity(id) {
-    const rarity = await calculateRarity(id);
-    const infoEarth = await filterEarthAttributes(id);
+getInfoEarth('0x790b2cf29ed4f310bf7641f013c65d4560d28371','66050')
+export async function conclusionRarity(contract,id) {
+    const rarity = await calculateRarity(contract,id);
+    const infoEarth = await filterEarthAttributes(contract,id);
     const minPrice = 0.141
     const Price = infoEarth.ethPrice;
     let differencePrice = Price / minPrice;
@@ -293,7 +295,7 @@ export async function conclusionRarity(id) {
         return 'Эта цена сильно выше рынка'
     }
 }
-export async function getFloorPrice() {
+export async function getFloorPrice(contract) {
     const options = {
         method: 'GET',
         headers: {
@@ -301,7 +303,7 @@ export async function getFloorPrice() {
             Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
         }
     };
-    const response = await fetch('https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&sortBy=floorAskPrice&limit=1&includeTopBid=false&excludeEOA=false&includeAttributes=True&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false', options)
+    const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=${contract}&sortBy=floorAskPrice&limit=1&includeTopBid=false&excludeEOA=false&includeAttributes=True&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
     const data = await response.json()
     const floorId = data.tokens[0].token.tokenId
     return floorId
