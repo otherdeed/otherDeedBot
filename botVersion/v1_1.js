@@ -324,7 +324,6 @@ async function msgBotAttributes(id) {
     let mess = checkMsgBotDecor()
     return mess;
 }
-
 async function conclusionRarity(id) {
     const rarity = await calculateRarity(id);
     const infoEarth = await filterEarthAttributes(id);

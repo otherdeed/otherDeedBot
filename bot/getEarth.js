@@ -2,7 +2,7 @@ import { log } from 'console';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-export async function getAttributes(contract,id) {
+export async function getAttributes(contract, id) {
     const options = {
         method: 'GET',
         headers: {
@@ -10,106 +10,84 @@ export async function getAttributes(contract,id) {
             Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
         }
     };
-    const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=${contract}&tokenName=${id}&sortBy=floorAskPrice&limit=20&includeTopBid=false&excludeEOA=false&includeAttributes=true&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
-    const data = await response.json()
-    const dataAttributes = await data.tokens[0].token.attributes
-    let Attributes = {
-        sediment: {
-            names: '',
-            tier: 0
-        },
-        environment: {
-            names: '',
-            tier: 0
-        },
-        nResource: {
-            names: '',
-            tier: 0
-        },
-        sResource: {
-            names: '',
-            tier: 0
-        },
-        wResource: {
-            names: '',
-            tier: 0
-        },
-        eResource: {
-            names: '',
-            tier: 0
-        },
-        artifact: {
-            names: ''
-        },
-        koda: false
-    }
 
-    function getEarthAttributes(type, objectKey) {
-        const attributes = dataAttributes;
-        for (let i = 0; i < attributes.length; i++) {
-            if (attributes[i].key === type) {
-                if (!Attributes[objectKey]) {
-                    Attributes[objectKey] = {};
-                }
-                Attributes[objectKey].names = attributes[i].value;
-                break;
-            }
-        }
-    }
-    getEarthAttributes('Sediment', 'sediment')
-    getEarthAttributes('Environment', 'environment')
-    getEarthAttributes('Northern Resource', 'nResource')
-    getEarthAttributes('Southern Resource', 'sResource')
-    getEarthAttributes('Western Resource', 'wResource')
-    getEarthAttributes('Eastern Resource', 'eResource')
-    getEarthAttributes('Artifact', 'artifact')
-
-    function getEarthTier(type, objectKey) {
-        const attributes = dataAttributes;
-        for (let i = 0; i < attributes.length; i++) {
-            if (attributes[i].key === type) {
-                if (!Attributes[objectKey]) {
-                    Attributes[objectKey] = {};
-                }
-                Attributes[objectKey].tier = attributes[i].value;
-                break;
-            }
-        }
-    }
-    getEarthTier('Sediment Tier', 'sediment')
-    getEarthTier('Environment Tier', 'environment')
-    getEarthTier('Northern Resource Tier', 'nResource')
-    getEarthTier('Southern Resource Tier', 'sResource')
-    getEarthTier('Western Resource Tier', 'wResource')
-    getEarthTier('Eastern Resource Tier', 'eResource')
-
-    function getEarthKoda(type, objectKey) {
-        const attributes = dataAttributes;
-        for (let i = 0; i < attributes.length; i++) {
-            if (attributes[i].key === type) {
-                Attributes[objectKey] = true
-                break;
-            }
-        }
-    }
-    getEarthKoda('Koda', 'koda')
-    console.log(Attributes);
-    return Attributes;
-}
-export async function getInfoEarth(contract,id) {
     try {
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: '*/*',
-                Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
-            }
-        };
-        const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=${contract}&tokenName=${id}&sortBy=floorAskPrice&limit=1&includeTopBid=false&excludeEOA=false&includeAttributes=True&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options)
-        const data = await response.json()
-        // console.log(data.tokens[0].token.tokenId)
-        const Attributes = await getAttributes(id)
+        const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=${contract}&tokenName=${id}&sortBy=floorAskPrice&limit=20&includeTopBid=false&excludeEOA=false&includeAttributes=true&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options);
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+
+        // Проверка наличия данных и токенов
+        if (!data || !data.tokens || data.tokens.length === 0) {
+            throw new Error('No tokens data found in the response');
+        }
+
+        const tokenData = data.tokens[0];
         const dataEarth = await data.tokens[0]
+        if (!tokenData || !tokenData.token || !tokenData.token.attributes) {
+            throw new Error('No token attributes found in the response');
+        }
+
+        const dataAttributes = tokenData.token.attributes;
+
+        let Attributes = {
+            sediment: { names: '', tier: 0 },
+            environment: { names: '', tier: 0 },
+            nResource: { names: '', tier: 0 },
+            sResource: { names: '', tier: 0 },
+            wResource: { names: '', tier: 0 },
+            eResource: { names: '', tier: 0 },
+            artifact: { names: '' },
+            koda: false
+        };
+
+        function getEarthAttributes(type, objectKey) {
+            for (let i = 0; i < dataAttributes.length; i++) {
+                if (dataAttributes[i].key === type) {
+                    if (!Attributes[objectKey]) {
+                        Attributes[objectKey] = {};
+                    }
+                    Attributes[objectKey].names = dataAttributes[i].value;
+                    break;
+                }
+            }
+        }
+        getEarthAttributes('Sediment', 'sediment');
+        getEarthAttributes('Environment', 'environment');
+        getEarthAttributes('Northern Resource', 'nResource');
+        getEarthAttributes('Southern Resource', 'sResource');
+        getEarthAttributes('Western Resource', 'wResource');
+        getEarthAttributes('Eastern Resource', 'eResource');
+        getEarthAttributes('Artifact', 'artifact');
+
+        function getEarthTier(type, objectKey) {
+            for (let i = 0; i < dataAttributes.length; i++) {
+                if (dataAttributes[i].key === type) {
+                    if (!Attributes[objectKey]) {
+                        Attributes[objectKey] = {};
+                    }
+                    Attributes[objectKey].tier = dataAttributes[i].value;
+                    break;
+                }
+            }
+        }
+        getEarthTier('Sediment Tier', 'sediment');
+        getEarthTier('Environment Tier', 'environment');
+        getEarthTier('Northern Resource Tier', 'nResource');
+        getEarthTier('Southern Resource Tier', 'sResource');
+        getEarthTier('Western Resource Tier', 'wResource');
+        getEarthTier('Eastern Resource Tier', 'eResource');
+
+        function getEarthKoda(type, objectKey) {
+            for (let i = 0; i < dataAttributes.length; i++) {
+                if (dataAttributes[i].key === type) {
+                    Attributes[objectKey] = true;
+                    break;
+                }
+            }
+        }
+        getEarthKoda('Koda', 'koda');
         const infoEarth = {
             id: dataEarth.token.tokenId,
             contract: dataEarth.token.contract,
@@ -131,15 +109,14 @@ export async function getInfoEarth(contract,id) {
             artifact: Attributes.artifact.names,
             koda: Attributes.koda
         }
-        console.log(infoEarth);
-        return infoEarth
-    } catch (erorr) {
-        console.log(erorr);
+        return Attributes;
+    } catch (error) {
+        console.error('Error in getAttributes:', error);
+        return null;
     }
 }
-
 export async function filterEarthAttributes(contract,id) {
-    let infoEarth = await getInfoEarth(contract,id)
+    let infoEarth = await getAttributes(contract,id)
 
     function deleteEmpty(objKey, objTierKey) {
         if (infoEarth[objKey] == '' || infoEarth[objTierKey] == false) {
@@ -268,7 +245,6 @@ export async function msgBotAttributes(contract,id) {
     let mess = checkMsgBotDecor()
     return mess;
 }
-getInfoEarth('0x790b2cf29ed4f310bf7641f013c65d4560d28371','66050')
 export async function conclusionRarity(contract,id) {
     const rarity = await calculateRarity(contract,id);
     const infoEarth = await filterEarthAttributes(contract,id);
@@ -308,5 +284,35 @@ export async function getFloorPrice(contract) {
     const floorId = data.tokens[0].token.tokenId
     return floorId
 }
+export async function getFiftyEarth(contract) {
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: '*/*',
+            Authorization: '74937b04-9ea2-4c1e-a6cf-3702655b7934'
+        }
+    };
+    try{
+        const response = await fetch(`https://api-mainnet.magiceden.dev/v3/rtp/ethereum/tokens/v6?collection=${contract}&sortBy=floorAskPrice&limit=50&includeTopBid=false&excludeEOA=false&includeAttributes=true&includeQuantity=false&includeDynamicPricing=false&includeLastSale=false&normalizeRoyalties=false`, options);
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+        let idEarths = {
+            
+        }
+        const conclusion = await calculateRarity(contract,data.tokens[0].token.tokenId)
+        // for (let i = 0; i < 50; i++) {
+        //     // console.log(data.tokens[i].token.tokenId);
+        //     const conclusion = await calculateRarity(contract,data.tokens[i].token.tokenId)
+        //     // idEarths[i+1] = conclusion
+        //     console.log(conclusion);         
+        // }
+        console.log(conclusion);
+    }catch(erorr){
+        console.log(erorr);
+    }
+}
 
-
+getFiftyEarth('0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258')
+// calculateRarity('0x790b2cf29ed4f310bf7641f013c65d4560d28371','15189')
