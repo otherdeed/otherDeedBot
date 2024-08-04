@@ -301,18 +301,14 @@ export async function getFiftyEarth(contract) {
         let idEarths = {
             
         }
-        const conclusion = await calculateRarity(contract,data.tokens[0].token.tokenId)
-        // for (let i = 0; i < 50; i++) {
-        //     // console.log(data.tokens[i].token.tokenId);
-        //     const conclusion = await calculateRarity(contract,data.tokens[i].token.tokenId)
-        //     // idEarths[i+1] = conclusion
-        //     console.log(conclusion);         
-        // }
-        console.log(conclusion);
+        for (let i = 0; i < 50; i++) {
+            const conclusion = await calculateRarity(contract,data.tokens[i].token.tokenId)
+            idEarths[i+1] = conclusion
+        }
+        console.log(idEarths);
     }catch(erorr){
         console.log(erorr);
     }
 }
-
 getFiftyEarth('0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258')
 // calculateRarity('0x790b2cf29ed4f310bf7641f013c65d4560d28371','15189')
