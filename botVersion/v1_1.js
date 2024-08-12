@@ -29,25 +29,15 @@ const commands = [{
   }
 ];
 bot.setMyCommands(commands);
-let users = {};  // Инициализация объекта для хранения пользователей
-let cnt = 0;  // Инициализация счетчика
-let user = []
-
-async function getUser(msg) {
-    cnt += 1;
-    let userName = '@' + msg.chat.username;
-
-    // Проверка наличия пользователя
-    if (users.hasOwnProperty(userName)) {
-        console.log('user exists');
-    } else {
-        console.log('user not exists');
-        users[userName] = cnt;
-        user.push(users);
-    }
-
+async function Users(msg){
+    let user = {}
+    let users = {}
+    user.username = `@${msg.chat.username}`
+    user.msgCount = msg.message_id
+    users[msg.chat.first_name] = user
     console.log(users);
-    console.log(user);
+
+    
 }
 botErorr.on('message',async (msg)=>{
     let message = await botErorr.sendMessage(msg.chat.id,'users')
@@ -488,6 +478,6 @@ bot.on('text', async (msg) => {
     let tokenID = msg.text
     let time = timeConverter(msg.date)
     console.log(`пользователь @${msg.chat.username} отправил сообщение ${tokenID} в ${time} `)
-    // getUser(msg)
+    // Users(msg)
     startCommand(msg);
 });
