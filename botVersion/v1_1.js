@@ -1,11 +1,9 @@
 import TelegramBot from 'node-telegram-bot-api';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+try{
 const bot = new TelegramBot('7171580107:AAFqiIAXr_WkZheoOjjFrSowRsa9wLTdQpc', {
-    polling: {
-        interval: 300,
-        autoStart: true
-    }
-});
-const botErorr = new TelegramBot('7074118463:AAEpq0E6fnG_8QE3znqjTGJUN7dmD4FEKYQ', {
     polling: {
         interval: 300,
         autoStart: true
@@ -29,19 +27,6 @@ const commands = [{
   }
 ];
 bot.setMyCommands(commands);
-async function Users(msg){
-    let user = {}
-    let users = {}
-    user.username = `@${msg.chat.username}`
-    user.msgCount = msg.message_id
-    users[msg.chat.first_name] = user
-    console.log(users);
-
-    
-}
-botErorr.on('message',async (msg)=>{
-    let message = await botErorr.sendMessage(msg.chat.id,'users')
-})
 
 bot.on('polling_error', (err) => {
     console.log(err.data.error.message)
@@ -176,7 +161,6 @@ async function getInfoEarth(id) {
         }
         return infoEarth
     }catch(erorr){
-        botErorr.sendMessage(1875576355, 'Сейчас бот перегружен, попробуйте позже.');
         console.log(erorr);
     }
 }
@@ -198,10 +182,6 @@ async function filterEarthAttributes(id) {
     deleteEmpty('koda', 'koda');
     return infoEarth
 }
-
-import { promises as fs } from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 async function calculateRarity(id) {
@@ -472,12 +452,20 @@ async function commandSearch(msg) {
 
     bot.on('text', currentQueryHandler);
 }
-
-
 bot.on('text', async (msg) => {
     let tokenID = msg.text
     let time = timeConverter(msg.date)
     console.log(`пользователь @${msg.chat.username} отправил сообщение ${tokenID} в ${time} `)
-    // Users(msg)
     startCommand(msg);
 });
+
+}catch(erorr){
+    const botErorr = new TelegramBot('7074118463:AAEpq0E6fnG_8QE3znqjTGJUN7dmD4FEKYQ', {
+        polling: {
+            interval: 300,
+            autoStart: true
+        }
+    });
+    console.log(erorr);
+    botErorr.sendMessage(1875576355, 'Сейчас бот перегружен, попробуйте позже.');
+}
