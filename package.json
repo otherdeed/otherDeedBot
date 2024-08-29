@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "@graphprotocol/graph-cli": "^0.80.1",
     "axios": "^1.7.2",
     "etherscan-api": "^10.3.0",
     "git": "^0.1.5",
